@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+	<head>
+		<title>PokeTab</title>
+		<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="top-container">
+				<div class="quick-help">
+					<h1>Quick help</h1>
+					<h2>Basic commands:</h2>
+					<p><span>></span> s &ltquery&gt - find query in google by default</p>
+					<p><span>></span> new category &ltname&gt &ltcolor&gt - create a new category</p>
+					<p><span>></span> new item &ltname&gt &ltcategory&gt &lturl&gt - create a new item in the category</p>
+					<p><span>></span> &ltitemName&gt - go to a previously saved item</p>
+				</div>
+
+				<div class="image-container">
+					|(random-poke #p"resources/sprites/")|
+				</div>
+
+				<div id="info-container" class="info-container">
+					<div class="time container-shadow">
+						<h1 id="date"></h1>
+						<h2 id="time"></h2>
+					</div>
+				</div>
+			</div>
+
+			<div class="input-container container-shadow">
+				<span class="input-arrow"> > </span>
+				<input id="input" autofocus class="input-field" placeholder="Enter your command..."/>
+			</div>
+			<div class="category-container">
+				|(put-data params)|
+			</div>
+		</div>
+	</body>
+	<script defer src="main.js"></script>
+</html>

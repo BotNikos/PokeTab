@@ -106,7 +106,7 @@ body {
 .sprite-image {
 	display: block;
 	margin: auto;
-	height: calc(100vh / 3);
+	width: 100%;
 }
 
 .sprite-name {

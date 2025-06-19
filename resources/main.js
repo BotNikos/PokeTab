@@ -58,6 +58,23 @@ function showMessage ({title, type, message}) {
 	}, 10000);
 }
 
+function validQuery (query) {
+	let ret = true;
+	let allowedWords = [["new", "delete"], ["item", "category"]]
+	candidates.forEach ( ( i ) => allowedWords[0].push ( i.innerHTML ) )
+
+	for (let i = 0; i < allowedWords.length; i++){
+		if (query[i] && !allowedWords[i].includes (query [i]))
+			ret = false;
+	}
+
+	if (query [0] == "s") {
+		ret = true;
+	}
+
+	return ret;
+}
+
 function checkRes (res, message) {
 	if (res.success) {
 		showMessage ({title: "Success", type: "success", message})
@@ -94,19 +111,24 @@ inputField.addEventListener ('keydown', (event) => {
 	if (event.key == 'Enter') {
 		let splitedQuery = event.target.value.split(" ")
 
-		//checkValidFunc here
-		if (candidates[selectedCandidate - 1]) {
-			window.location.href = candidates[selectedCandidate - 1].href
-		} else if (splitedQuery[0] == 's') {
-			window.location.href = `https://google.com/search?q=${splitedQuery.slice(1).join(" ")}`
+		if ( validQuery ( splitedQuery ) ) {
+
+			if ( candidates.map ((i) => i.innerHTML).includes ( event.target.value ) ) {
+				window.location.href = candidates[selectedCandidate - 1].href
+			} else if (splitedQuery[0] == 's') {
+				window.location.href = `https://google.com/search?q=${splitedQuery.slice(1).join(" ")}`
+			} else {
+				endpoints[splitedQuery[0]][splitedQuery[1]] (splitedQuery);
+			}
+
+			event.target.value = ''
+			event.target.dispatchEvent(new CustomEvent ('input'))
+
 		} else {
-			//checkValidFunction or here
-			endpoints[splitedQuery[0]][splitedQuery[1]] (splitedQuery);
+			showMessage ({title: "Error", type: "error", message: "You have some error in your query"})
 		}
 
-		event.target.value = ''
 		candidates = [...links]
-		event.target.dispatchEvent(new CustomEvent ('input'))
 	}
 
 	if (event.keyCode == 9) {
@@ -116,6 +138,7 @@ inputField.addEventListener ('keydown', (event) => {
 			selectedCandidate = 0
 		}
 
+		// FIXME: Simplify logic
 		candidates[prevCandidate].style = ''
 		prevCandidate = selectedCandidate
 		event.target.value = candidates[selectedCandidate].innerHTML

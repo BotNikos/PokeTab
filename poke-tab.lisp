@@ -89,7 +89,7 @@
          (send-poke params))
         ((equal path "/new") (db-new params))
         ((equal path "/delete") (db-delete params))
-        ((equal path "/test") (send 'data "<h1>Some test!</h1>" :header '((status . "200 OK") ("Content-Type" . "application/json"))))
+        ((equal path "/test") (send 'data "<h1>Some test!</h1>" :header '((status . "200 OK") ("Content-Type" . "text/html"))))
         (t (send 'file (format nil "resources/~a" (subseq path 1))))))
 
 (defun main ()

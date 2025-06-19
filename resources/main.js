@@ -58,49 +58,50 @@ function showMessage ({title, type, message}) {
 	}, 10000);
 }
 
-function getNewCategoryFetchString (query) {
-	return `/new?type=${query[1]}&title=${query[2]}&color=${query[3]}`;
+function checkRes (res, message) {
+	if (res.success) {
+		showMessage ({title: "Success", type: "success", message})
+		setTimeout (() => window.location.reload(), 2000);
+	} else {
+		showMessage ({title: "Error", type: "error", message: "Some server error"})
+	}
 }
 
-function getNewItemFetchString (query) {
-	return `/new?type=${query[1]}&title=${query[2]}&category=${query[3]}&url=${query[4]}`
+function newCategory ( query ) {
+	return fetch (`/new?type=${query[1]}&title=${query[2]}&color=${query[3]}`).then ( ( res ) => res.json () )
 }
 
-let newEndpoints = {
-	"category": getNewCategoryFetchString,
-	"item": getNewItemFetchString
+async function newItem ( query ) {
+	return fetch (`/new?type=${query[1]}&title=${query[2]}&category=${query[3]}&url=${query[4]}`).then ( ( res ) => res.json () )
+}
+
+async function deleteReq ( query ) {
+	return fetch (`/delete?type=${query[1]}&title=${query[2]}`).then ( ( res ) => res.json () );
+}
+
+let endpoints = {
+	"new": {
+		"category": ( query ) => { newCategory  ( query )	.then ( ( res ) => checkRes ( res, "Category successfully added<br/>Page will reload in 2 sec" ) ) },
+		"item": 	( query ) => { newItem		( query )	.then ( ( res ) => checkRes ( res, "Item successfully added<br/>Page will reload in 2 sec" ) ) },
+	},
+	"delete": {
+		"category": ( query ) => { deleteReq	( query )	.then ( ( res ) => checkRes ( res, "Category successfully deleted<br/>Page will reload in 2 sec" ) ) },
+		"item": 	( query ) => { deleteReq	( query )	.then ( ( res ) => checkRes ( res, "Item successfully deleted<br/>Page will reload in 2 sec" ) ) },
+	}
 }
 
 inputField.addEventListener ('keydown', (event) => {
 	if (event.key == 'Enter') {
 		let splitedQuery = event.target.value.split(" ")
 
+		//checkValidFunc here
 		if (candidates[selectedCandidate - 1]) {
 			window.location.href = candidates[selectedCandidate - 1].href
 		} else if (splitedQuery[0] == 's') {
 			window.location.href = `https://google.com/search?q=${splitedQuery.slice(1).join(" ")}`
-		} else if (splitedQuery[0] == 'new') {
-			let result = fetch (newEndpoints[splitedQuery[1]](splitedQuery))
-				.then((res) => res.json())
-				.then((json) => {
-					if (json.success) {
-						showMessage ({title: "Success", type: "success", message: "Successfully added<br/>page will reload in 2 seconds"})
-						setTimeout (() => window.location.reload(), 2000);
-					} else {
-						showMessage ({title: "Error", type: "error", message: "Some server error"})
-					}
-				})
-		} else if (splitedQuery[0] == 'delete') {
-			let result = fetch (`/delete?type=${splitedQuery[1]}&title=${splitedQuery[2]}`)
-				.then((res) => res.json())
-				.then((json) => {
-					if (json.success) {
-						showMessage ({title: "Success", type: "success", message: "Successfully deleted<br/>page will reload in 2 seconds"})
-						setTimeout (() => window.location.reload(), 2000);
-					} else {
-						showMessage ({title: "Error", type: "error", message: "Some server error"})
-					}
-				})
+		} else {
+			//checkValidFunction or here
+			endpoints[splitedQuery[0]][splitedQuery[1]] (splitedQuery);
 		}
 
 		event.target.value = ''

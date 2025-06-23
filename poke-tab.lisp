@@ -12,7 +12,6 @@
 
 (in-package :poke-tab)
 
-(setf *random-state* (make-random-state t))
 (defparameter *db* nil)
 
 (defun parse-args (args)
@@ -67,7 +66,7 @@
     (send 'temp "resources/index.html" :params params)))
 
 (defun db-new (params)
-  (if (equal (cdr (assoc 'type params))  "category")
+  (if (equal (cdr (assoc 'type params)) "category")
       (execute-non-query *db* "insert into categories (title, color) values (?, ?)"
                          (cdr (assoc 'title params))
                          (format nil "#~a" (cdr (assoc 'color params))))
@@ -93,10 +92,12 @@
         (t (send 'file (format nil "resources/~a" (subseq path 1))))))
 
 (defun main ()
+  (in-package :poke-tab)
   (let* ((args (parse-args (command-line-arguments)))
          (port (cadr (assoc "p" args :test #'string=)))
          (db-path (cadr (assoc "d" args :test #'string=))))
     (cond ((eq port nil) (princ "You need to specify port with -p flag"))
           ((eq db-path nil) (princ "You need to specify database path with -d flag"))
-          ('otherwise (setf *db* (connect db-path))
+          ('otherwise (setf *random-state* (make-random-state t))
+                      (setf *db* (connect db-path))
                       (serv 8888 #'req-handler)))))

@@ -16,21 +16,44 @@ Simple application that provides keyboard-inspired custom tab prettified with lo
 ** Installation
 Once all requirements is installed you need to do following:
 
-1. Create =common-lisp= directory in your home
+- Create =common-lisp= directory in your home
 
 #+begin_src bash
 mkdir common-lisp
 #+end_src
 
-2. Clone this repository in previously created direcory
+- Clone this repository in previously created direcory
 
 #+begin_src  bash
 git clone https://github.com/BotNikos/PokeTab
 #+end_src
-3. Build and install application
+
+- Build and install application
 
 #+begin_src
 make && sudo make install
 #+end_src
 
-After all this steps you can go to page =http://localhost:8888= in your browser and see results
+After all this steps you can go to page =http://localhost:8888= in your browser and see results:
+
+[[./readme/screenshot.png]]
+
+* Quick guide
+User-input prompt can execute queries that match the scheme below (also can be seen on the page itself):
+[[./resources/quick-guide-ebnf.png]]
+
+This scheme means that you can use following commands:
+- new item/category - to create an item or a category
+- delete item/category - to delete an item or a category
+- s - to search your search-query string via google
+- o - to open direct-link directly
+- item-name - name of some previously saved item in a category, which opens link attached to that item
+
+/Note: All nodes that have dash in their name are variables in prompt/
+
+* Contribution
+If you are common-lisp fan or maybe you like this project or you found some mistake that keeps you awake at nights then you are welcome to contribute your ideas and fixes
+
+* Inspired by
+1. https://github.com/Tressley/_traichu
+2. https://github.com/excalith/excalith-start-page

@@ -68,7 +68,7 @@ function validQuery (query) {
 			ret = false;
 	}
 
-	if (query [0] == "s") {
+	if (query [0] == "s" || query [0] == "o") {
 		ret = true;
 	}
 
@@ -117,6 +117,8 @@ inputField.addEventListener ('keydown', (event) => {
 				window.location.href = candidates[selectedCandidate - 1].href
 			} else if (splitedQuery[0] == 's') {
 				window.location.href = `https://google.com/search?q=${splitedQuery.slice(1).join(" ")}`
+			} else if (splitedQuery[0] == 'o') {
+				window.location.href = `https://${splitedQuery.slice(1).join(" ")}`
 			} else {
 				endpoints[splitedQuery[0]][splitedQuery[1]] (splitedQuery);
 			}

@@ -1,7 +1,7 @@
 #+title: Poke-tab
 #+author: BotNikos
 
-#+HTML: <img src="readme/zigzagoon-galar.png" align="right">
+#+HTML: <img src="readme/zigzagoon-galar.png" align="right" height="130">
 
 Simple application that provides keyboard-inspired custom tab prettified with lovely pokemons.
 

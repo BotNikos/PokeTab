@@ -3,7 +3,7 @@
 
 #+HTML: <img src="readme/zigzagoon-galar.png" align="right" height="130">
 
-Simple application that provides keyboard-inspired custom tab prettified with lovely pokemons.
+Simple application that provides keyboard-inspired custom tab prettified with lovely pokemons
 
 * Getting started
 ** Requirements
@@ -57,3 +57,8 @@ If you are common-lisp fan or maybe you like this project or you found some mist
 * Inspired by
 1. https://github.com/Tressley/_traichu
 2. https://github.com/excalith/excalith-start-page
+3. https://github.com/msikma/pokesprite
+
+* License
+The sprite images are © Nintendo/Creatures Inc./GAME FREAK Inc.
+Everything else, and the programming code, is governed by the MIT license.

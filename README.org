@@ -1,6 +1,32 @@
 #+title: Poke-tab
 #+author: BotNikos
 
-#+HTML: <img src="resources/sprites/zigzagoon-galar.png" align="right">
+#+HTML: <img src="readme/zigzagoon-galar.png" align="right">
 
 Simple application that provides keyboard-inspired custom tab prettified with lovely pokemons.
+
+* Getting started
+** Requirements
+- SBCL
+- [[https://github.com/BotNikos/clwebserv][Clwebserv]]
+- Make
+- Sqlite3 (optional)
+- Sqlite common-lisp [[https://cl-sqlite.common-lisp.dev/][library]]
+
+** Installation
+Once all requirements is installed you need to do following:
+
+1. Create =common-lisp= directory in your home
+  #+begin_src bash
+mkdir common-lisp
+  #+end_src
+2. Clone this repository in previously created direcory
+  #+begin_src  bash
+git clone https://github.com/BotNikos/PokeTab
+  #+end_src
+3. Build and install application
+  #+begin_src
+make && sudo make install
+  #+end_src
+
+After all this steps you can go to page =http://localhost:8888= in your browser and see the page

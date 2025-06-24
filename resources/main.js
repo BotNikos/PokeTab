@@ -133,6 +133,7 @@ inputField.addEventListener ('keydown', (event) => {
 		candidates = [...links]
 	}
 
+	// Tab-key pressed
 	if (event.keyCode == 9) {
 		event.preventDefault ()
 

@@ -88,11 +88,11 @@ function newCategory ( query ) {
 	return fetch (`/new?type=${query[1]}&title=${query[2]}&color=${query[3]}`).then ( ( res ) => res.json () )
 }
 
-async function newItem ( query ) {
+function newItem ( query ) {
 	return fetch (`/new?type=${query[1]}&title=${query[2]}&category=${query[3]}&url=${query[4]}`).then ( ( res ) => res.json () )
 }
 
-async function deleteReq ( query ) {
+function deleteReq ( query ) {
 	return fetch (`/delete?type=${query[1]}&title=${query[2]}`).then ( ( res ) => res.json () );
 }
 

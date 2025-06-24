@@ -22,7 +22,7 @@ Once all requirements is installed you need to do following:
 mkdir common-lisp
 #+end_src
 
-- Clone this repository in previously created direcory
+- Clone this repository in previously created directory
 
 #+begin_src  bash
 git clone https://github.com/BotNikos/PokeTab

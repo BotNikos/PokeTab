@@ -58,30 +58,18 @@ function showMessage ({title, type, message}) {
 	}, 10000);
 }
 
-function validQuery (query) {
-	let ret = true;
-	let allowedWords = [["new", "delete"], ["item", "category"]]
-	candidates.forEach ( ( i ) => allowedWords[0].push ( i.innerHTML ) )
-
-	for (let i = 0; i < allowedWords.length; i++){
-		if (query[i] && !allowedWords[i].includes (query [i]))
-			ret = false;
-	}
-
-	if (query [0] == "s" || query [0] == "o") {
-		ret = true;
-	}
-
-	return ret;
-}
-
 function checkRes (res, message) {
+	let ret = true;
+
 	if (res.success) {
 		showMessage ({title: "Success", type: "success", message})
 		setTimeout (() => window.location.reload(), 2000);
 	} else {
 		showMessage ({title: "Error", type: "error", message: "Some server error"})
+		ret = false;
 	}
+
+	return ret
 }
 
 function newCategory ( query ) {
@@ -96,38 +84,48 @@ function deleteReq ( query ) {
 	return fetch (`/delete?type=${query[1]}&title=${query[2]}`).then ( ( res ) => res.json () );
 }
 
-let endpoints = {
+let validFuncs = {
 	"new": {
-		"category": ( query ) => { newCategory  ( query )	.then ( ( res ) => checkRes ( res, "Category successfully added<br/>Page will reload in 2 sec" ) ) },
-		"item": 	( query ) => { newItem		( query )	.then ( ( res ) => checkRes ( res, "Item successfully added<br/>Page will reload in 2 sec" ) ) },
+		"item":		(query) => { return newItem		( query ).then ( ( res ) => checkRes ( res, "Item successfully added<br/>Page will reload in 2 sec" ) ) },
+		"category": (query) => { return newCategory	( query ).then ( ( res ) => checkRes ( res, "Category successfully added<br/>Page will reload in 2 sec" ) )	}
 	},
 	"delete": {
-		"category": ( query ) => { deleteReq	( query )	.then ( ( res ) => checkRes ( res, "Category successfully deleted<br/>Page will reload in 2 sec" ) ) },
-		"item": 	( query ) => { deleteReq	( query )	.then ( ( res ) => checkRes ( res, "Item successfully deleted<br/>Page will reload in 2 sec" ) ) },
+		"item":		(query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res, "Category successfully deleted<br/>Page will reload in 2 sec") ) },
+		"category": (query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res, "Item successfully deleted<br/>Page will reload in 2 sec" ) ) },
+	},
+	"s": (query) => { window.location.href = `https://google.com/search?q=${query.slice(1).join(" ")}`; return true },
+	"o": (query) => { window.location.href = `https://${query.slice(1).join(" ")}`; return true }
+}
+
+let wordsCount = ["first", "second", "third"]
+
+function validFindFunc (query, obj, wc) {
+	let node = obj [ query.shift () ];
+	wc += 1;
+
+	if (typeof node == "object") {
+		node = validFindFunc (query, node, wc);
+	} else if (typeof node == "undefined") {
+		node = () => {
+			showMessage ({title: "Error", type: "error", message: `You've an error in ${wordsCount[wc - 1]} word`})
+			return false;
+		}
 	}
+
+	return node;
+}
+
+function validQuery (query) {
+	candidates.forEach ( ( c ) => { validFuncs [c.innerHTML] = () => { window.location.href = c.href } });
+	return (validFindFunc (query.split (" "), validFuncs, 0)) (query.split (" "))
 }
 
 inputField.addEventListener ('keydown', (event) => {
 	if (event.key == 'Enter') {
-		let splitedQuery = event.target.value.split(" ")
 
-		if ( validQuery ( splitedQuery ) ) {
-
-			if ( candidates.map ((i) => i.innerHTML).includes ( event.target.value ) ) {
-				window.location.href = candidates[selectedCandidate - 1].href
-			} else if (splitedQuery[0] == 's') {
-				window.location.href = `https://google.com/search?q=${splitedQuery.slice(1).join(" ")}`
-			} else if (splitedQuery[0] == 'o') {
-				window.location.href = `https://${splitedQuery.slice(1).join(" ")}`
-			} else {
-				endpoints[splitedQuery[0]][splitedQuery[1]] (splitedQuery);
-			}
-
+		if ( validQuery ( event.target.value ) ) {
 			event.target.value = ''
 			event.target.dispatchEvent(new CustomEvent ('input'))
-
-		} else {
-			showMessage ({title: "Error", type: "error", message: "You have some error in your query"})
 		}
 
 		candidates = [...links]

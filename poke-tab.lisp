@@ -74,14 +74,14 @@
                          (cdr (assoc 'title params))
                          (cdr (assoc 'category params))
                          (cdr (assoc 'url params))))
-  (send 'data "{\"success\": true}" :header '((status . "200 OK") ("Content-Type" . "application/json"))))
+  (send 'data "{\"success\": true, \"message\": \"Successfully added<br/>Page will be reloaded in 2 sec\"}" :header '((status . "200 OK") ("Content-Type" . "application/json"))))
 
 (defun db-delete (params)
   (execute-non-query *db* "pragma foreign_keys = on")
   (if (equal (cdr (assoc 'type params)) "category")
       (execute-non-query *db* "delete from categories where title like ?" (cdr (assoc 'title params)))
       (execute-non-query *db* "delete from items where title like ?" (cdr (assoc 'title params))))
-  (send 'data "{\"success\": true}" :header '((status . "200 OK") ("Content-Type" . "application/json"))))
+  (send 'data "{\"success\": true, \"message\": \"Successfully deleted<br/>Page will be reloaded in 2 sec\"}" :header '((status . "200 OK") ("Content-Type" . "application/json"))))
 
 (defun req-handler (path params)
   (cond ((or (equal path "/index.html") (equal path "/"))

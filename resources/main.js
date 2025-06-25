@@ -58,14 +58,14 @@ function showMessage ({title, type, message}) {
 	}, 10000);
 }
 
-function checkRes (res, message) {
+function checkRes ( { success, message } ) {
 	let ret = true;
 
-	if (res.success) {
+	if (success) {
 		showMessage ({title: "Success", type: "success", message})
 		setTimeout (() => window.location.reload(), 2000);
 	} else {
-		showMessage ({title: "Error", type: "error", message: "Some server error"})
+		showMessage ({title: "Error", type: "error", message})
 		ret = false;
 	}
 
@@ -81,17 +81,27 @@ function newItem ( query ) {
 }
 
 function deleteReq ( query ) {
-	return fetch (`/delete?type=${query[1]}&title=${query[2]}`).then ( ( res ) => res.json () );
+	let selector = ( query[1] == "item" ) ? ".category-item" : ".category-name"
+	let elems = [...document.querySelectorAll ( selector )].map ( ( i ) => i.innerHTML );
+	let res;
+
+	if (elems.includes (query [2])) {
+		res = fetch (`/delete?type=${query[1]}&title=${query[2]}`).then ( ( res ) => res.json () );
+	} else {
+		res = new Promise ((resolve, reject) => {resolve ({success: false, message: "No such item or cateogry"})})
+	}
+
+	return res;
 }
 
 let validFuncs = {
 	"new": {
-		"item":		(query) => { return newItem		( query ).then ( ( res ) => checkRes ( res, "Item successfully added<br/>Page will reload in 2 sec" ) ) },
-		"category": (query) => { return newCategory	( query ).then ( ( res ) => checkRes ( res, "Category successfully added<br/>Page will reload in 2 sec" ) )	}
+		"item":		(query) => { return newItem		( query ).then ( ( res ) => checkRes ( res ) ) },
+		"category": (query) => { return newCategory	( query ).then ( ( res ) => checkRes ( res ) )	}
 	},
 	"delete": {
-		"item":		(query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res, "Category successfully deleted<br/>Page will reload in 2 sec") ) },
-		"category": (query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res, "Item successfully deleted<br/>Page will reload in 2 sec" ) ) },
+		"item":		(query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res ) ) },
+		"category": (query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res ) ) },
 	},
 	"s": (query) => { window.location.href = `https://google.com/search?q=${query.slice(1).join(" ")}`; return true },
 	"o": (query) => { window.location.href = `https://${query.slice(1).join(" ")}`; return true }

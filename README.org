@@ -1,7 +1,7 @@
 #+title: Poke-tab
 #+author: BotNikos
 
-#+HTML: <img src="resources/sirfetched.png" align="right" height="130">
+#+HTML: <img src="resources/sprites/sirfetchd.png" align="right" height="130">
 
 Simple application that provides keyboard-inspired custom tab prettified with lovely pokemons
 

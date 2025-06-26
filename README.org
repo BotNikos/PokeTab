@@ -1,7 +1,7 @@
 #+title: Poke-tab
 #+author: BotNikos
 
-#+HTML: <img src="readme/zigzagoon-galar.png" align="right" height="130">
+#+HTML: <img src="resources/sirfetched.png" align="right" height="130">
 
 Simple application that provides keyboard-inspired custom tab prettified with lovely pokemons
 
@@ -30,7 +30,7 @@ git clone https://github.com/BotNikos/PokeTab
 
 - Build and install application
 
-#+begin_src
+#+begin_src bash
 make && sudo make install
 #+end_src
 

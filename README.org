@@ -10,7 +10,7 @@ Simple application that provides keyboard-inspired custom tab prettified with lo
 - SBCL
 - [[https://github.com/BotNikos/clwebserv][Clwebserv]]
 - Make
-- Sqlite3 (optional)
+- Sqlite3
 - Sqlite common-lisp [[https://cl-sqlite.common-lisp.dev/][library]]
 
 ** Installation

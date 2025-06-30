@@ -28,10 +28,11 @@ mkdir common-lisp
 git clone https://github.com/BotNikos/PokeTab
 #+end_src
 
-- Build and install application
+- Build and run the application
 
 #+begin_src bash
-make && sudo make install
+make
+./poke-tab -p 8888 -d custom-tab.db
 #+end_src
 
 After all this steps you can go to page =http://localhost:8888= in your browser and see results:

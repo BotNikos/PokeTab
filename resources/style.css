@@ -1,13 +1,4 @@
-:root {
-	--bg-color: #282A36;
-	--accent-color: #BD93F9;
-	--bg2-color: #44475A;
-	--foreground-color: #F8F8F2;
-	--foreground2-color: #6272A4;
-	--error-color: #FF5555;
-	--warning-color: #F1FA8C;
-	--success-color: #50FA7B;
-}
+|(poke-tab:put-colors poke-tab:params)|
 
 @font-face {
 	font-family: FiraCode;

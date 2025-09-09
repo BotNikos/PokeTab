@@ -8,6 +8,7 @@
   (:export :main
            :random-poke
            :put-data
+           :put-colors
            :params))
 
 (in-package :poke-tab)
@@ -59,6 +60,25 @@
                                                                                  (cadr item)))))
                   collect "</div></div>"))))
 
+(defun put-colors (theme)
+  (let ((theme (car theme)))
+    (format t "/*~a Theme*/~%" (nth 1 theme))
+    (format t ":root {~%")
+    (format t "--accent-color: ~a;~%" (nth 3 theme))
+    (format t "--bg-color: ~a;~%" (nth 4 theme))
+    (format t "--bg2-color: ~a;~%" (nth 5 theme))
+    (format t "--foreground-color: ~a;~%" (nth 6 theme))
+    (format t "--foreground2-color: ~a;~%" (nth 7 theme))
+    (format t "--error-color: ~a;~%" (nth 8 theme))
+    (format t "--warning-color: ~a;~%" (nth 9 theme))
+    (format t "--success-color: ~a;~%" (nth 10 theme))
+    (princ "}")
+    (princ "")))
+
+(defun send-style ()
+  (let ((theme (execute-to-list *db* "select * from themes where selected=1")))
+    (send 'temp "resources/style.css" :params theme)))
+
 (defun send-poke (params)
   (let* ((categories (execute-to-list *db* "select * from categories"))
          (items (execute-to-list *db* "select * from items"))
@@ -86,6 +106,7 @@
 (defun req-handler (path params)
   (cond ((or (equal path "/index.html") (equal path "/"))
          (send-poke params))
+        ((equal path "/style.css") (send-style))
         ((equal path "/new") (db-new params))
         ((equal path "/delete") (db-delete params))
         ((equal path "/test") (send 'data "<h1>Some test!</h1>" :header '((status . "200 OK") ("Content-Type" . "text/html"))))
@@ -100,4 +121,4 @@
           ((eq db-path nil) (princ "You need to specify database path with -d flag"))
           ('otherwise (setf *random-state* (make-random-state t))
                       (setf *db* (connect db-path))
-                      (serv 8888 #'req-handler)))))
+                      (serv (parse-integer port)  #'req-handler)))))

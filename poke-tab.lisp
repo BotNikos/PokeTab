@@ -103,12 +103,24 @@
       (execute-non-query *db* "delete from items where title like ?" (cdr (assoc 'title params))))
   (send 'data "{\"success\": true, \"message\": \"Successfully deleted<br/>Page will be reloaded in 2 sec\"}" :header '((status . "200 OK") ("Content-Type" . "application/json"))))
 
+(defun set-theme (params)
+  (cond ((execute-to-list *db* "select * from themes where title like ?" (cdr (assoc 'title params)))
+         (execute-non-query *db* "update themes set selected = 0 where selected = 1")
+         (execute-non-query *db* "update themes set selected = 1 where title like ?" (cdr (assoc 'title params)))
+         (send 'data
+               "{\"success\": true, \"message\": \"Theme changed<br/>Page will be reloaded in 2 sec\"}"
+               :header '((status . "200 OK") ("Content-Type" . "application/json"))))
+        (t (send 'data
+               "{\"success\": false, \"message\": \"No such theme\"}"
+               :header '((status . "404 Not Found") ("Content-Type" . "application/json"))))))
+
 (defun req-handler (path params)
   (cond ((or (equal path "/index.html") (equal path "/"))
          (send-poke params))
         ((equal path "/style.css") (send-style))
         ((equal path "/new") (db-new params))
         ((equal path "/delete") (db-delete params))
+        ((equal path "/theme") (set-theme params))
         ((equal path "/test") (send 'data "<h1>Some test!</h1>" :header '((status . "200 OK") ("Content-Type" . "text/html"))))
         (t (send 'file (format nil "resources/~a" (subseq path 1))))))
 

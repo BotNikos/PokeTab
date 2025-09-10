@@ -94,6 +94,10 @@ function deleteReq ( query ) {
 	return res;
 }
 
+function selectTheme ( query ) {
+	return fetch (`/theme?title=${query[1]}`).then ( ( res ) => res.json () );
+}
+
 let validFuncs = {
 	"new": {
 		"item":		(query) => { return newItem		( query ).then ( ( res ) => checkRes ( res ) ) },
@@ -103,8 +107,9 @@ let validFuncs = {
 		"item":		(query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res ) ) },
 		"category": (query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res ) ) },
 	},
+	"t": (query) => { return selectTheme ( query ).then ( ( res ) => checkRes ( res ) ) },
 	"s": (query) => { window.location.href = `https://google.com/search?q=${query.slice(1).join(" ")}`; return true },
-	"o": (query) => { window.location.href = `https://${query.slice(1).join(" ")}`; return true }
+	"o": (query) => { window.location.href = `https://${query.slice(1).join(" ")}`; return true },
 }
 
 let wordsCount = ["first", "second", "third"]

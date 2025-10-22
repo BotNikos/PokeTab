@@ -50,7 +50,7 @@
          `(string .
            ,(loop for category in (cdr (assoc 'categories params))
                   collect "<div class=\"category container-shadow\">"
-                  collect (format nil "<div class=\"category-name\" style=\"color: ~a\">~a</div>" (cadddr category) (caddr category))
+                  collect (format nil "<div class=\"category-name\" style=\"color: ~a\">~a</div>" (execute-single *db* "select color from theme_colors where theme_id = (select id from themes where selected = 1) and color_num = ?" (cadddr category)) (caddr category))
                   collect "<hr/>"
                   collect "<div class=\"category-items-container\">"
                   collect (apply #'concatenate `(string . ,(loop for item in (car category)
@@ -60,24 +60,23 @@
                                                                                  (cadr item)))))
                   collect "</div></div>"))))
 
-(defun put-colors (theme)
-  (let ((theme (car theme)))
-    (format t "/*~a Theme*/~%" (nth 1 theme))
-    (format t ":root {~%")
-    (format t "--accent-color: ~a;~%" (nth 3 theme))
-    (format t "--bg-color: ~a;~%" (nth 4 theme))
-    (format t "--bg2-color: ~a;~%" (nth 5 theme))
-    (format t "--foreground-color: ~a;~%" (nth 6 theme))
-    (format t "--foreground2-color: ~a;~%" (nth 7 theme))
-    (format t "--error-color: ~a;~%" (nth 8 theme))
-    (format t "--warning-color: ~a;~%" (nth 9 theme))
-    (format t "--success-color: ~a;~%" (nth 10 theme))
-    (princ "}")
-    (princ "")))
+(defun put-colors (colors)
+  (format t ":root {~%")
+  (format t "--bg-color: ~a;~%" (cadr (nth 0 colors)))
+  (format t "--bg2-color: ~a;~%" (cadr (nth 1 colors)))
+  (format t "--foreground-color: ~a;~%" (cadr (nth 2 colors)))
+  (format t "--foreground2-color: ~a;~%" (cadr (nth 3 colors)))
+  (format t "--accent-color: ~a;~%" (cadr (nth 4 colors)))
+  (format t "--error-color: ~a;~%" (cadr (nth 5 colors)))
+  (format t "--warning-color: ~a;~%" (cadr (nth 6 colors)))
+  (format t "--success-color: ~a;~%" (cadr (nth 7 colors)))
+  (princ "}")
+  (princ ""))
 
 (defun send-style ()
-  (let ((theme (execute-to-list *db* "select * from themes where selected=1")))
-    (send 'temp "resources/style.css" :params theme)))
+  (let* ((theme_id (execute-single *db* "select id from themes where selected=1"))
+        (colors (execute-to-list *db* "select color_num, color from theme_colors where theme_id = ?" theme_id)))
+    (send 'temp "resources/style.css" :params colors)))
 
 (defun send-poke (params)
   (let* ((categories (execute-to-list *db* "select * from categories"))
@@ -87,9 +86,9 @@
 
 (defun db-new (params)
   (if (equal (cdr (assoc 'type params)) "category")
-      (execute-non-query *db* "insert into categories (title, color) values (?, ?)"
+      (execute-non-query *db* "insert into categories (title, color_num) values (?, ?)"
                          (cdr (assoc 'title params))
-                         (format nil "#~a" (cdr (assoc 'color params))))
+                         (+ 5 (random 4)))
       (execute-non-query *db* "insert into items (title, category_id, url) values (?, (select id from categories where title like ?), ?)"
                          (cdr (assoc 'title params))
                          (cdr (assoc 'category params))

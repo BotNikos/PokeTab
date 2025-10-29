@@ -189,12 +189,12 @@ body {
 
 .category-item {
 	width: calc(100% / 2);
-	color: #F8F8F2;
+	color: var(--foreground-color);
 	font-size: 16px;
 	text-decoration: none;
 }
 
 .category-item:hover {
 	cursor: pointer;
-	color: #BD93F9;
+	color: var(--accent-color);
 }

@@ -28,7 +28,7 @@ inputField.addEventListener('input', (event) => {
 		let userInput = event.target.value.toLowerCase ()
 
 		if ( !linkName.includes( userInput ) && userInput != '' ) {
-			link.style = 'color: #6272A4'
+			link.style = 'color: var(--foreground2-color)'
 		} else {
 			link.style = ''
 			candidates.push (link)
@@ -158,7 +158,7 @@ inputField.addEventListener ('keydown', (event) => {
 		candidates[prevCandidate].style = ''
 		prevCandidate = selectedCandidate
 		event.target.value = candidates[selectedCandidate].innerHTML
-		candidates[selectedCandidate++].style = 'color: #BD93F9'
+		candidates[selectedCandidate++].style = 'color: var(--accent-color)'
 	}
 })
 

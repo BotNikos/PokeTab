@@ -1,10 +1,10 @@
-let dateElem	= document.getElementById ('date')
-let timeElem	= document.getElementById ('time')
-let inputField	= document.getElementById ('input')
+let dateElem		= document.getElementById   ('date')
+let timeElem		= document.getElementById   ('time')
+let inputField		= document.getElementById   ('input')
 let links		= document.querySelectorAll ('.category-item')
-let candidates	= [...links]
-let prevCandidate = 0
-let selectedCandidate = 0
+let candidates		= [...links]
+let prevCandidate	= 0
+let selectedCandidate	= 0
 
 function changeTime () {
 	let date = new Date ()
@@ -59,11 +59,12 @@ function showMessage ({title, type, message}) {
 }
 
 function checkRes ( { success, message } ) {
-	let ret = true;
+	let ret;
 
 	if (success) {
 		showMessage ({title: "Success", type: "success", message})
 		setTimeout (() => window.location.reload(), 2000);
+		ret = true;
 	} else {
 		showMessage ({title: "Error", type: "error", message})
 		ret = false;
@@ -100,16 +101,16 @@ function selectTheme ( query ) {
 
 let validFuncs = {
 	"new": {
-		"item":		(query) => { return newItem		( query ).then ( ( res ) => checkRes ( res ) ) },
-		"category": (query) => { return newCategory	( query ).then ( ( res ) => checkRes ( res ) )	}
+		"item":		(query) => { return newItem	( query ).then ( ( res ) => checkRes ( res ) ) },
+		"category":	(query) => { return newCategory	( query ).then ( ( res ) => checkRes ( res ) )	}
 	},
 	"delete": {
 		"item":		(query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res ) ) },
-		"category": (query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res ) ) },
+		"category":	(query) => { return deleteReq	( query ).then ( ( res ) => checkRes ( res ) ) },
 	},
 	"t": (query) => { return selectTheme ( query ).then ( ( res ) => checkRes ( res ) ) },
-	"s": (query) => { window.location.href = `https://google.com/search?q=${query.slice(1).join(" ")}`; return true },
-	"o": (query) => { window.location.href = `https://${query.slice(1).join(" ")}`; return true },
+	"s": (query) => { window.location.href = `https://google.com/search?q=${query.slice(1).join(" ")}`; return new Promise ( ( resolve, reject ) => { resolve ( true ) } ) },
+	"o": (query) => { window.location.href = `https://${query.slice(1).join(" ")}`; return new Promise ( ( resolve, reject ) => { resolve ( true ) } ) },
 }
 
 let wordsCount = ["first", "second", "third"]
@@ -136,13 +137,16 @@ function validQuery (query) {
 }
 
 inputField.addEventListener ('keydown', (event) => {
+    
 	if (event.key == 'Enter') {
-
-		if ( validQuery ( event.target.value ) ) {
-			event.target.value = ''
-			event.target.dispatchEvent(new CustomEvent ('input'))
-		}
-
+		validQuery ( event.target.value )
+			.then ( ( res ) => {
+				if ( res ) {
+					event.target.value = ''
+					event.target.dispatchEvent(new CustomEvent ('input'))
+				}
+			} )
+		
 		candidates = [...links]
 	}
 

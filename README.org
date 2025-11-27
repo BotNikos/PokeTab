@@ -3,7 +3,7 @@
 
 #+HTML: <img src="resources/sprites/sirfetchd.png" align="right" height="130">
 
-Simple application that provides keyboard-inspired custom tab prettified with lovely pokemons
+Simple application that provides keyboard-inspired web-browser custom tab prettified with lovely pokemons
 
 * Getting started
 ** Requirements
@@ -48,6 +48,7 @@ This scheme means that you can use following commands:
 - delete item/category - to delete an item or a category
 - s - to search your search-query string via google
 - o - to open direct-link directly
+- t - to change color theme
 - item-name - name of some previously saved item in a category, which opens link attached to that item
 
 /Note: All nodes that have dash in their name are variables in prompt/

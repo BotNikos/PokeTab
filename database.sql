@@ -50,6 +50,7 @@ insert into themes ( title, selected ) values ( 'Monokai', 0 );
 insert into themes ( title, selected ) values ( 'Catppuccin', 0 );
 insert into themes ( title, selected ) values ( 'Gruvbox', 0 );
 insert into themes ( title, selected ) values ( 'Nord', 0 );
+insert into themes ( title, selected ) values ( 'Everforest', 0 );
 
 -- Dracula theme_colors
 insert into theme_colors ( theme_id, color_num, color ) values ( 1, 1, '#282A36' ); -- bg color
@@ -100,3 +101,15 @@ insert into theme_colors ( theme_id, color_num, color ) values ( 5, 5, '#88c0d0'
 insert into theme_colors ( theme_id, color_num, color ) values ( 5, 6, '#bf616a' ); -- error color
 insert into theme_colors ( theme_id, color_num, color ) values ( 5, 7, '#ebcb8b' ); -- warning color
 insert into theme_colors ( theme_id, color_num, color ) values ( 5, 8, '#a3be8c' ); -- success color
+
+-- Everforest theme colors
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 1, '#272E33' ); -- bg color
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 2, '#2E383C' ); -- bg2 color
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 3, '#D3C6AA' ); -- fg color
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 4, '#859289' ); -- fg2 color
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 5, '#A7C080' ); -- accient color
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 6, '#E67E80' ); -- error color
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 7, '#DBBC7F' ); -- warning color
+insert into theme_colors ( theme_id, color_num, color ) values ( 6, 8, '#83C092' ); -- success color
+
+
